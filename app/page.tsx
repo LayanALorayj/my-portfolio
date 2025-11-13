@@ -7,10 +7,8 @@ import ContactSection from "./components/sections/ContactSection";
 
 export const metadata = {
   title: "My Portfolio",
-  description: "Portfolio built with Next.js 16 (Server Components)",
+  description: "Portfolio",
 };
-
-export const dynamic = "force-dynamic";
 
 export default function Page() {
   const sections = [
@@ -23,7 +21,6 @@ export default function Page() {
 
   return (
     <main className="scroll-smooth bg-gray-900 text-gray-100">
-      {/* Navbar */}
       <nav className="fixed top-0 left-0 w-full bg-gray-900/80 backdrop-blur-md z-50 border-b border-gray-800">
         <ul className="flex justify-center gap-8 py-4 text-gray-300">
           {sections.map(({ id, label }) => (
@@ -36,7 +33,6 @@ export default function Page() {
         </ul>
       </nav>
 
-      {/* Render Sections */}
       {sections.map(({ id, content }) => (
         <Section key={id} id={id}>
           {content}
