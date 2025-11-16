@@ -1,13 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 @import "tailwindcss";
+
+@theme {
+   --color-primary: var(--color-violet);
+  --color-secondary: var(--color-rose);
+  --color-bg: var(--color-blackdeep);
+  --color-text: var(--color-lavender);
+  
+  --color-lavender: #D8D8F6;
+  --color-violet: #B18FCF;
+  --color-rose: #978897;
+  --color-graydeep: #494850;
+  --color-blackdeep: #2C2C34;
+
+   --font-pixelify: 'Pixelify Sans', monospace;
+}
+
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    background-color: theme(colors.gray.900);
-    color: theme(colors.gray.100);
   }
 
   body {
-    font-family: system-ui, sans-serif;
+    background-color: var(--color-blackdeep);
+    color: var(--color-lavender);
+    font-family: var(--font-geist-sans, sans-serif);
+    
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+
+  @layer components {
+  .nav-link {
+    @apply relative px-3 py-2 rounded-lg transition-all duration-300;
+    .divider-dot {
+    @apply w-2 h-2 bg-rose rounded-full mx-4 transition-all duration-500;
+    } 
+    .divider-dot:hover {
+    @apply scale-150 bg-violet;
+  }
+  
+  .divider-line {
+    @apply w-24 h-px transition-all duration-500;
+  }
+  
+  .divider-line:hover {
+    @apply w-32;
+  }
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-1/2 w-0 h-0.5 bg-violet transition-all duration-300;
+    transform: translateX(-50%);
+  }
+  
+  .nav-link:hover::after {
+    @apply w-3/4;
+  }
+  }
+   .word-spacing-wide {
+    word-spacing: 0.3em;
+  }
+}
 }
