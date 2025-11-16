@@ -10,7 +10,6 @@ export const metadata = {
   description: "Portfolio",
 };
 
-// إنشاء Navigation كـ Server Component منفصل
 function Navigation() {
   const sections = [
     { id: "home", label: "Home" },
@@ -63,7 +62,6 @@ export default function Page() {
             {content}
           </Section>
           
-          {/* خط أنيق بين الأقسام ماعدا الأخير - مع تحسينات للرؤية */}
           {index < sections.length - 1 && (
             <div className="flex justify-center items-center py-12">
               <div className="w-32 h-0.5 bg-linear-to-r from-transparent via-violet/80 to-violet"></div>
