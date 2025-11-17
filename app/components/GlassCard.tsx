@@ -32,7 +32,7 @@ export default function GlassCard({ title, description, imageSrc }: GlassCardPro
           <h1 className="text-4xl md:text-5xl font-bold text-[--color-lavender] mb-4 leading-tight font-pixelify">
             {title}
           </h1>
-          <p className="text-[--color-secondary] text-lg leading-relaxed font-pixelify word-spacing-wide">
+          <p className="text-[--color-secondary] text-lg leading-relaxed word-spacing-wide">
             {description}
           </p>
         </div>

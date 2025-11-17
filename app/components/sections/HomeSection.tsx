@@ -9,8 +9,8 @@ export default function HomeSection() {
             Hi, I’m Layan
           </h1>
           
-          <p className="text-[--color-secondary] text-xl md:text-2xl leading-relaxed max-w-lg font-pixelify word-spacing-wide letter-spacing-wide ">
-            a <span className="text-[--color-primary] font-semibold font-pixelify">Frontend Developer </span> 
+          <p className="text-[--color-secondary] text-xl md:text-2xl leading-relaxed max-w-lg word-spacing-wide letter-spacing-wide ">
+            a <span className="text-[--color-primary] font-semibold ">Frontend Developer </span> 
             focused on building fast, modern web apps.  
             Passionate about modern UI, clean code, and creating user-friendly experiences.
           </p>
