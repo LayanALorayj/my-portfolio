@@ -1,4 +1,4 @@
-import SkillsClient from "../SkillsClient";
+import SkillsClient from "../client/SkillsClient";
 
 export default function SkillsSection() {
   const skills = {
@@ -18,7 +18,7 @@ export default function SkillsSection() {
   };
 
   return (
-    <section id="skills" className="min-h-screen py-20 px-8 flex items-center justify-center">
+    <section id="skills" className="min-h-screen py-20 px-8 flex items-center justify-center z-0"> 
       <div className="w-full max-w-6xl">
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-bold text-violet mb-4 font-pixelify">

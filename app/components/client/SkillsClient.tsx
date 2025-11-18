@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import SkillCard from "./SkillCard";
+import SkillCard from "../SkillCard";
 
 type SkillsClientProps = {
   skills: {

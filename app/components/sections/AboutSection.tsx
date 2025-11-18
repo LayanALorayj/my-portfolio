@@ -9,7 +9,7 @@ export default function AboutSection() {
         passionate about building modern, performant, and user-friendly web applications.
          I enjoy crafting clean, maintainable code and bringing creative UI ideas to life. 
          Always eager to learn new technologies and improve the user experience."
-        imageSrc="Capture-.png" 
+        imageSrc="/image/Capture-.png" 
       />
     </section>
   );

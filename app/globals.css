@@ -13,19 +13,23 @@
   --color-graydeep: #494850;
   --color-blackdeep: #2C2C34;
 
-   --font-pixelify: 'Pixelify Sans', monospace;
+   --font-pixelify: 'Pixelify Sans', 'monospace','Roboto Mono';
 }
 
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     background-color: var(--color-blackdeep);
     color: var(--color-lavender);
     font-family: var(--font-geist-sans, sans-serif);
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
     
   }
 

@@ -9,7 +9,7 @@ export default function HomeSection() {
             Hi, I’m Layan
           </h1>
           
-          <p className="text-[--color-secondary] text-xl md:text-2xl leading-relaxed max-w-lg word-spacing-wide letter-spacing-wide ">
+          <p className="text-[--color-secondary] text-xl md:text-2xl leading-relaxed max-w-lg word-spacing-wide letter-spacing-wide font-Roboto Mono ">
             a <span className="text-[--color-primary] font-semibold ">Frontend Developer </span> 
             focused on building fast, modern web apps.  
             Passionate about modern UI, clean code, and creating user-friendly experiences.
@@ -18,7 +18,7 @@ export default function HomeSection() {
 
         <div className="flex-shrink-0">
           <img
-            src="stik1-.png"
+            src="/image/stik1-.png"
             alt="Layan"
             className="w-64 md:w-96 object-cover"
           />
