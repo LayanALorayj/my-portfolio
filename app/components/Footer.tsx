@@ -1,4 +1,4 @@
-import ContactForm from "./ContactForm";
+import ContactForm from "./client/ContactForm";
 import { GithubOutlined, LinkedinOutlined, MailOutlined } from '@ant-design/icons';
 
 export default function Footer() {
@@ -82,7 +82,7 @@ export default function Footer() {
                 <div className="space-y-3">
                   <p className="text-rose flex items-center gap-3">
                     <MailOutlined className="text-violet" />
-                    layan@email.com
+                    layanalorayj@outlook.com
                   </p>
                   <p className="text-rose flex items-center gap-3">
                     <span className="text-violet">📍</span>
