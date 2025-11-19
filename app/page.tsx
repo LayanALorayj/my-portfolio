@@ -22,14 +22,20 @@ export default function Page() {
   ];
 
   return (
-    <main className="scroll-smooth bg-blackdeep text-lavender">
+    <main className="scroll-smooth bg-blackdeep text-lavender overflow-x-hidden w-full">
       <Navigation />
       
       {sections.map(({ id, content }, index) => (
-        <div key={id} className="relative">
-          <Section id={id}>
-            {content}
-          </Section>
+        <div key={id} className="relative w-full overflow-hidden">
+          {id === "home" ? (
+            <div className="w-full overflow-hidden">
+              {content}
+            </div>
+          ) : (
+            <Section id={id}>
+              {content}
+            </Section>
+          )}
           
           {index < sections.length - 1 && (
             <div className="flex justify-center items-center py-12">
