@@ -39,7 +39,7 @@ export default function ProjectCard({
           <img
             src={imageUrl}
             alt={title}
-            className={`w-full h-full object-contain transition-transform duration-700 ${
+            className={`w-full  object-contain transition-transform duration-700 ${
               isHovered ? 'scale-105' : 'scale-100'
             }`}
             onError={() => setImageError(true)}
