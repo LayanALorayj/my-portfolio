@@ -16,7 +16,7 @@ export default function ContactForm() {
     e.preventDefault();
     
     if (formData.honeypot) {
-      console.log("🤖 Bot detected! Honeypot field is filled.");
+      console.log("Bot detected! Honeypot field is filled.");
       return; 
     }
 
@@ -24,7 +24,7 @@ export default function ContactForm() {
     setErrorMessage("");
 
     try {
-      const response = await fetch('/api/send', {
+      const response = await fetch('/api/sendmassage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
