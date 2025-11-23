@@ -1,35 +1,53 @@
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  console.log('API Route called - Honeypot Check');
+  console.log('Contact Form API Called');
   
   try {
     const body = await req.json();
-    console.log('Request body received');
-    
-    const { name, email, message, honeypot } = body;
-    console.log('Extracted data:', { name, email, message });
+    const { name, email, message, turnstileToken } = body;
 
-    if (honeypot && honeypot.trim() !== "") {
-      console.log('BOT DETECTED - Honeypot field is filled:', honeypot);
+    if (!turnstileToken) {
       return NextResponse.json({ 
-        success: true, 
-        message: "Message sent successfully!" 
-      });
+        error: "Security verification failed." 
+      }, { status: 400 });
     }
 
-    if (!name || !email || !message) {
-      console.log('Missing required fields');
+    const turnstileResponse = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          secret: process.env.TURNSTILE_SECRET_KEY,
+          response: turnstileToken,
+        }),
+      }
+    );
+
+    const turnstileData = await turnstileResponse.json();
+    
+    if (!turnstileData.success) {
+      console.log('Turnstile verification failed');
       return NextResponse.json({ 
-        error: "All fields are required" 
+        error: "Security check failed. Please try again." 
+      }, { status: 400 });
+    }
+
+    console.log('✅ Turnstile verification successful');
+
+    if (!name || !email || !message) {
+      return NextResponse.json({ 
+        error: "All fields are required." 
       }, { status: 400 });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      console.log('Invalid email format');
       return NextResponse.json({ 
-        error: "Please enter a valid email address" 
+        error: "Please enter a valid email address." 
       }, { status: 400 });
     }
 
@@ -37,29 +55,13 @@ export async function POST(req: Request) {
     const fromEmail = process.env.NEXT_PUBLIC_SENDGRID_FROM;
     const toEmail = process.env.NEXT_PUBLIC_SENDGRID_TO;
 
-    console.log('🔑 Environment check:', {
-      hasApiKey: !!apiKey,
-      apiKeyLength: apiKey?.length,
-      fromEmail,
-      toEmail
-    });
-
-    if (!apiKey) {
-      console.log('API Key missing');
+    if (!apiKey || !fromEmail || !toEmail) {
+      console.log('Missing environment variables');
       return NextResponse.json({ 
-        error: "API key is missing" 
+        error: "Server configuration error." 
       }, { status: 500 });
     }
 
-    if (!fromEmail || !toEmail) {
-      console.log('Email settings incomplete');
-      return NextResponse.json({ 
-        error: "Email settings are incomplete" 
-      }, { status: 500 });
-    }
-
-    console.log('Attempting to send to SendGrid...');
-    
     const sendgridResponse = await fetch("https://api.sendgrid.com/v3/mail/send", {
       method: "POST",
       headers: {
@@ -70,30 +72,39 @@ export async function POST(req: Request) {
         personalizations: [
           {
             to: [{ email: toEmail }],
-            subject: `New Portfolio Message from ${name}`,
+            subject: `New Message from ${name} - Portfolio Contact`,
           },
         ],
         from: { email: fromEmail },
-        reply_to: { email: email }, 
+        reply_to: { email: email },
         content: [
           {
             type: "text/plain",
-            value: `Name: ${name}\nEmail: ${email}\nMessage: ${message}\n\n📧 Sent from Portfolio Contact Form`
+            value: `
+            Name: ${name}
+            Email: ${email}
+            Message: ${message}
+            Sent from Portfolio Contact Form
+            `
           },
           {
             type: "text/html",
             value: `
-              <div style="font-family: Arial, sans-serif; padding: 20px;">
-                <h2 style="color: #333;">New Message from Portfolio</h2>
-                <p><strong>Name:</strong> ${name}</p>
-                <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Message:</strong></p>
-                <div style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
-                  ${message.replace(/\n/g, '<br>')}
+              <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px;">
+                <h2 style="color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px;">
+                  New Message From Portfolio
+                </h2>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                  <p><strong>Name:</strong> ${name}</p>
+                  <p><strong>Email:</strong> ${email}</p>
+                  <p><strong>Message:</strong></p>
+                  <div style="background: white; padding: 15px; border-radius: 5px; border-left: 4px solid #667eea;">
+                    ${message.replace(/\n/g, '<br>')}
+                  </div>
                 </div>
-                <hr>
-                <p style="color: #666; font-size: 12px;">
-                  Sent from your portfolio contact form
+                <hr style="border: none; border-top: 1px solid #ddd;">
+                <p style="color: #666; font-size: 12px; text-align: center;">
+                  This message was sent from your portfolio contact form
                 </p>
               </div>
             `
@@ -102,28 +113,25 @@ export async function POST(req: Request) {
       }),
     });
 
-    console.log('SendGrid response status:', sendgridResponse.status);
-
     if (!sendgridResponse.ok) {
       const errorText = await sendgridResponse.text();
-      console.log('SendGrid error response:', errorText);
+      console.log('SendGrid error:', errorText);
       return NextResponse.json({ 
         error: "Failed to send message. Please try again later." 
       }, { status: 500 });
     }
 
     console.log('Email sent successfully!');
-    console.log('Message details:', { name, email, messageLength: message.length });
     
     return NextResponse.json({ 
       success: true, 
       message: "Message sent successfully! I'll get back to you soon." 
     });
 
-  } catch (err) {
-    console.log('Catch block error:', err);
+  } catch (error) {
+    console.log('Server error:', error);
     return NextResponse.json({ 
-      error: "An unexpected server error occurred. Please try again later." 
+      error: "An unexpected error occurred. Please try again later." 
     }, { status: 500 });
   }
 }

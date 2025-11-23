@@ -1,23 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+
+declare global {
+  interface Window {
+    turnstile: any;
+  }
+}
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
-    honeypot: "" 
   });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const turnstileRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (turnstileRef.current && window.turnstile) {
+      window.turnstile.render(turnstileRef.current, {
+        sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!,
+        callback: (token: string) => {
+          setTurnstileToken(token);
+        },
+        "error-callback": () => {
+          setTurnstileToken("");
+          console.log("Turnstile error occurred");
+        },
+        "expired-callback": () => {
+          setTurnstileToken("");
+          console.log("Turnstile token expired");
+        },
+      });
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (formData.honeypot) {
-      console.log("Bot detected! Honeypot field is filled.");
-      return; 
+    if (!turnstileToken) {
+      setStatus("error");
+      setErrorMessage("Please complete the security verification.");
+      return;
     }
 
     setStatus("sending");
@@ -29,14 +56,22 @@ export default function ContactForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          turnstileToken
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setStatus("sent");
-        setFormData({ name: "", email: "", message: "", honeypot: "" });
+        setFormData({ name: "", email: "", message: "" });
+        setTurnstileToken("");
+        
+        if (window.turnstile && turnstileRef.current) {
+          window.turnstile.reset(turnstileRef.current);
+        }
         
         setTimeout(() => {
           setStatus("idle");
@@ -68,22 +103,6 @@ export default function ContactForm() {
       </p>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-        
-        <div className="hidden border-2 border-red-500 p-4 bg-yellow-100" aria-hidden="true">
-        <label htmlFor="honeypot" className="text-red-500 font-bold">
-      just for not humen
-        </label>
-        <input
-          type="text"
-          id="honeypot"
-          name="honeypot"
-          value={formData.honeypot}
-          onChange={handleChange}
-          className="border border-red-500 p-2 w-full mt-2"
-          placeholder="if you fill this email will not send"
-        />
-      </div>
-        
         <div className="space-y-2">
           <label className="text-rose font-pixelify text-sm">Name</label>
           <input
@@ -131,11 +150,15 @@ export default function ContactForm() {
           </div>
         )}
 
+        <div className="flex justify-center">
+          <div ref={turnstileRef} id="cf-turnstile-widget" />
+        </div>
+
         <button
           type="submit"
-          disabled={status === "sending"}
+          disabled={status === "sending" || !turnstileToken}
           className={`w-full py-4 rounded-xl font-bold font-pixelify text-lg transition-all duration-300 ${
-            status === "sending"
+            status === "sending" || !turnstileToken
               ? "bg-graydeep text-rose cursor-not-allowed"
               : status === "sent"
               ? "bg-green-500 text-white"
