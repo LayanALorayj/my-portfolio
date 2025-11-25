@@ -26,7 +26,7 @@ export default function SkillCard({ skill, index, category }: SkillCardProps) {
       className={`relative p-6 rounded-2xl border-2 transition-all duration-500 transform ${
         category === 'languages' 
           ? 'border-violet/30 bg-gradient-to-br from-violet/10 to-transparent' 
-          : 'border-rose/30 bg-gradient-to-br from-rose/10 to-transparent'
+          : 'border-rose/30 bg-gradient-to-br from-violet/10 to-transparent'
       } ${
         isHovered 
           ? 'scale-105 shadow-2xl' 
@@ -42,7 +42,7 @@ export default function SkillCard({ skill, index, category }: SkillCardProps) {
       )}
       
       <h3 className={`text-2xl font-bold font-pixelify mb-4 relative z-10 ${
-        category === 'languages' ? 'text-violet' : 'text-rose'
+        category === 'languages' ? 'text-violet' : 'text-violet'
       }`}>
         {skill.name}
       </h3>
@@ -53,7 +53,7 @@ export default function SkillCard({ skill, index, category }: SkillCardProps) {
             className={`h-3 rounded-full transition-all duration-1000 ease-out ${
               category === 'languages' 
                 ? 'bg-gradient-to-r from-violet to-violet/80' 
-                : 'bg-gradient-to-r from-rose to-rose/80'
+                :  'bg-gradient-to-r from-violet to-violet/80'
             }`}
             style={{ 
               width: `${animatedLevel}%`,

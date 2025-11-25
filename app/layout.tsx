@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Your Portfolio",
-  description: "Contact form with SendGrid and Cloudflare Turnstile",
+  title: "Layan Portfolio",
+  description: "Frontend Developer specializing in React, Next.js, and TypeScript, JavaScript. I design and develop modern, fast websites with the best user experience.",
 };
 
 export default function RootLayout({

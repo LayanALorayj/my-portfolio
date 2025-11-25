@@ -38,11 +38,35 @@ export default function GlassCard({ title, description, imageSrc }: GlassCardPro
         </div>
 
         <div className="shrink-0">
-          <img
-            src={imageSrc}
-            alt={title}
-            className="w-64 md:w-80 rounded-[--radius-card] object-cover "
-          />
+          <div className="hidden md:block image-content relative">
+            {/* ظل دائري متعدد الطبقات */}
+            <div className="absolute inset-0 -z-10">
+              <div 
+                className="absolute bg-white/25 blur-xl rounded-full"
+                style={{
+                  width: 'calc(100% + 50px)',
+                  height: 'calc(100% + 50px)',
+                  top: '-25px',
+                  left: '-25px',
+                }}
+              ></div>
+              <div 
+                className="absolute bg-white/10 blur-lg rounded-full"
+                style={{
+                  width: 'calc(50% + 10px)',
+                  height: 'calc(50% + 10px)',
+                  top: '-1px',
+                  left: '-1px',
+                }}
+              ></div>
+            </div>
+            
+            <img
+              src={imageSrc}
+              alt={title}
+              className="w-64 md:w-80 rounded-[--radius-card] object-cover relative z-10"
+            />
+          </div>
         </div>
       </div>
     </div>

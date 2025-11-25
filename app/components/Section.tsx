@@ -7,7 +7,7 @@ interface Props {
 
 export default function Section({ id, children }: Props) {
   return (
-    <section id={id} className="h-screen flex justify-center items-center">
+    <section id={id} className="min-h-screen flex justify-center items-center py-12">
       <MotionWrapper>{children}</MotionWrapper>
     </section>
   );

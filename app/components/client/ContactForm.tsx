@@ -18,24 +18,42 @@ export default function ContactForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [turnstileToken, setTurnstileToken] = useState<string>("");
   const turnstileRef = useRef<HTMLDivElement>(null);
+  const turnstileRendered = useRef(false); 
 
   useEffect(() => {
-    if (turnstileRef.current && window.turnstile) {
-      window.turnstile.render(turnstileRef.current, {
-        sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!,
-        callback: (token: string) => {
-          setTurnstileToken(token);
-        },
-        "error-callback": () => {
-          setTurnstileToken("");
-          console.log("Turnstile error occurred");
-        },
-        "expired-callback": () => {
-          setTurnstileToken("");
-          console.log("Turnstile token expired");
-        },
-      });
+    if (turnstileRendered.current || !window.turnstile || !turnstileRef.current) {
+      return;
     }
+
+    turnstileRendered.current = true;
+    
+    console.log("Rendering Turnstile widget...");
+    
+    window.turnstile.render(turnstileRef.current, {
+      sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!,
+      callback: (token: string) => {
+        console.log("Turnstile token received:", token);
+        setTurnstileToken(token);
+      },
+      "error-callback": () => {
+        console.log("Turnstile error occurred");
+        setTurnstileToken("");
+      },
+      "expired-callback": () => {
+        console.log("Turnstile token expired");
+        setTurnstileToken("");
+      },
+    });
+
+    return () => {
+      if (window.turnstile && turnstileRef.current) {
+        try {
+          window.turnstile.remove(turnstileRef.current);
+        } catch (error) {
+          console.log("Error cleaning up Turnstile:", error);
+        }
+      }
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -151,7 +169,11 @@ export default function ContactForm() {
         )}
 
         <div className="flex justify-center">
-          <div ref={turnstileRef} id="cf-turnstile-widget" />
+          <div 
+            ref={turnstileRef} 
+            id="cf-turnstile-contact-form"
+            className="turnstile-widget"
+          />
         </div>
 
         <button
