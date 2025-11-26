@@ -57,7 +57,6 @@ export default function HomeSection() {
         id="home"
         className="hero-video-section min-h-screen flex items-center justify-center relative overflow-hidden p-0 m-0 w-screen max-w-none"
       >
-        {/* الفيديو */}
         <div className="absolute inset-0 z-0 w-screen h-full">
           <iframe
             ref={iframeRef}
@@ -70,10 +69,8 @@ export default function HomeSection() {
           />
         </div>
 
-        {/* للموبايل: النص فوق وتحت الفيديو */}
         <div className="block md:hidden w-full h-full flex flex-col justify-between relative z-20">
-          {/* النص فوق الفيديو - مع padding-top لتجنب النافبار */}
-          <div className="w-full text-center pt-20 px-6"> {/* 🔥 غيرت pt-8 إلى pt-20 */}
+          <div className="w-full text-center pt-20 px-6"> 
             <h1 className="text-4xl font-bold text-white mb-3 leading-tight font-pixelify drop-shadow-lg">
               Hi, I'm Layan
             </h1>
@@ -82,7 +79,6 @@ export default function HomeSection() {
             </p>
           </div>
 
-          {/* النص تحت الفيديو */}
           <div className="w-full text-center pb-8 px-6">
             <div className="bg-blackdeep/70 backdrop-blur-sm rounded-2xl p-6 border border-graydeep/30 max-w-md mx-auto">
               <p className="text-white text-base leading-relaxed word-spacing-wide letter-spacing-wide font-Roboto Mono drop-shadow-lg">
@@ -93,7 +89,6 @@ export default function HomeSection() {
           </div>
         </div>
 
-        {/* للديسكتوب: التصميم الأصلي */}
         <div className="hidden md:flex flex-row items-center w-full max-w-6xl gap-12 relative z-20 px-6 mx-auto">
           <div className="flex-1 text-left md:pl-12">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 leading-tight font-pixelify drop-shadow-lg">

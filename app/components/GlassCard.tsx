@@ -39,7 +39,6 @@ export default function GlassCard({ title, description, imageSrc }: GlassCardPro
 
         <div className="shrink-0">
           <div className="hidden md:block image-content relative">
-            {/* ظل دائري متعدد الطبقات */}
             <div className="absolute inset-0 -z-10">
               <div 
                 className="absolute bg-white/25 blur-xl rounded-full"
