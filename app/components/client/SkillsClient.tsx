@@ -13,7 +13,7 @@ type SkillsClientProps = {
 export default function SkillsClient({ skills }: SkillsClientProps) {
   return (
     <div className="space-y-12">
-      {/* قسم Languages */}
+
       <div>
         <h3 className="text-3xl font-bold text-violet mb-8 text-center font-pixelify">
           Languages

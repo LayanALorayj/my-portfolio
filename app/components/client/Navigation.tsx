@@ -1,54 +1,76 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const sections = [
+  { id: "home", label: "Home" },
+  { id: "about", label: "About" },
+  { id: "skills", label: "Skills" },
+  { id: "projects", label: "Projects" },
+  { id: "contact", label: "Contact" },
+];
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
-  const sections = [
-    { id: "home", label: "Home" },
-    { id: "about", label: "About" },
-    { id: "skills", label: "Skills" },
-    { id: "projects", label: "Projects" },
-    { id: "contact", label: "Contact" },
-  ];
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+    sections.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleNavClick = (id: string) => {
     setIsMenuOpen(false);
     setActiveSection(id);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const linkClass = (id: string) =>
+    `flex items-center gap-2 rounded-xl px-4 py-2.5 font-pixelify text-lg font-medium transition-colors duration-300 ${
+      activeSection === id
+        ? "bg-violet/20 text-violet"
+        : "text-lavender hover:text-violet"
+    }`;
+
   return (
-    <nav className="fixed top-0 left-0 w-full bg-blackdeep/80 backdrop-blur-md z-50 border-b border-graydeep">
-      <div className="flex justify-between items-center px-4 md:px-8 py-4">
-        <div className="text-2xl md:text-3xl font-black text-violet hover:text-rose transition-colors duration-300 font-pixelify">
+    <nav className="fixed top-4 left-1/2 z-50 w-[calc(100%-2rem)] max-w-[1100px] -translate-x-1/2">
+      <div className="glass flex items-center justify-between rounded-2xl bg-blackdeep/40 px-6 py-3">
+        <a
+          href="#home"
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavClick("home");
+          }}
+          className="font-pixelify text-2xl font-bold text-violet transition-colors duration-300 hover:text-rose md:text-[28px]"
+        >
           &lt;Layan /&gt;
-        </div>
-        
-        <ul className="hidden md:flex justify-center gap-6 lg:gap-8 text-rose">
+        </a>
+
+        <ul className="hidden items-center gap-2 md:flex">
           {sections.map(({ id, label }) => (
             <li key={id}>
               <a
                 href={`#${id}`}
-                className={`font-bold hover:text-violet transition-all duration-300 px-4 py-3 rounded-lg hover:bg-graydeep/50 font-pixelify text-xl ${
-                  activeSection === id 
-                    ? 'text-violet border-b-2 border-violet bg-graydeep/30' 
-                    : 'text-rose'
-                }`}
+                className={linkClass(id)}
                 onClick={(e) => {
                   e.preventDefault();
                   handleNavClick(id);
                 }}
               >
+                {activeSection === id && <span className="h-1.5 w-1.5 bg-violet" />}
                 {label}
               </a>
             </li>
@@ -56,40 +78,47 @@ export default function Navigation() {
         </ul>
 
         <button
-          className="md:hidden flex flex-col justify-center items-center w-10 h-10 group"
-          onClick={toggleMenu}
+          type="button"
+          className="group flex h-10 w-10 flex-col items-center justify-center md:hidden"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
+          aria-expanded={isMenuOpen}
         >
-          <span className={`w-8 h-1 bg-rose transition-all duration-300 ${
-            isMenuOpen ? 'rotate-45 translate-y-2.5 bg-violet' : 'group-hover:bg-violet'
-          }`}></span>
-          <span className={`w-8 h-1 bg-rose transition-all duration-300 my-1.5 ${
-            isMenuOpen ? 'opacity-0' : 'opacity-100 group-hover:bg-violet'
-          }`}></span>
-          <span className={`w-8 h-1 bg-rose transition-all duration-300 ${
-            isMenuOpen ? '-rotate-45 -translate-y-2.5 bg-violet' : 'group-hover:bg-violet'
-          }`}></span>
+          <span
+            className={`h-0.5 w-7 bg-lavender transition-all duration-300 ${
+              isMenuOpen ? "translate-y-[7px] rotate-45 bg-violet" : ""
+            }`}
+          />
+          <span
+            className={`my-1.5 h-0.5 w-7 bg-lavender transition-all duration-300 ${
+              isMenuOpen ? "opacity-0" : "opacity-100"
+            }`}
+          />
+          <span
+            className={`h-0.5 w-7 bg-lavender transition-all duration-300 ${
+              isMenuOpen ? "-translate-y-[7px] -rotate-45 bg-violet" : ""
+            }`}
+          />
         </button>
       </div>
 
-      <div className={`md:hidden absolute top-full left-0 w-full bg-blackdeep/95 backdrop-blur-lg border-b border-graydeep transition-all duration-300 ${
-        isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
-      }`}>
-        <ul className="flex flex-col p-4 space-y-4">
+      <div
+        className={`glass mt-2 overflow-hidden rounded-2xl bg-blackdeep/90 transition-all duration-300 md:hidden ${
+          isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 border-transparent opacity-0"
+        }`}
+      >
+        <ul className="flex flex-col gap-1 p-3">
           {sections.map(({ id, label }) => (
             <li key={id}>
               <a
                 href={`#${id}`}
-                className={`block font-bold transition-all duration-300 py-4 px-5 rounded-lg hover:bg-violet/10 font-pixelify text-xl border-l-4 ${
-                  activeSection === id
-                    ? 'text-violet border-violet bg-violet/20 translate-x-2'
-                    : 'text-rose border-transparent hover:border-violet hover:translate-x-2'
-                }`}
+                className={linkClass(id)}
                 onClick={(e) => {
                   e.preventDefault();
                   handleNavClick(id);
                 }}
               >
+                {activeSection === id && <span className="h-1.5 w-1.5 bg-violet" />}
                 {label}
               </a>
             </li>

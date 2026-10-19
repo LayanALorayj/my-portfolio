@@ -1,109 +1,93 @@
 "use client";
 
 import { useState } from "react";
-import { EyeOutlined, GithubOutlined } from '@ant-design/icons';
+import { EyeOutlined, GithubOutlined } from "@ant-design/icons";
 
-interface ProjectCardProps {
+export interface ProjectCardProps {
   title: string;
   description: string;
-  imageUrl: string;
-  demoUrl: string;
+  imageUrl?: string;
+  demoUrl?: string;
   githubUrl?: string;
   technologies: string[];
-  index: number;
 }
 
-export default function ProjectCard({ 
-  title, 
-  description, 
-  imageUrl, 
-  demoUrl, 
+export default function ProjectCard({
+  title,
+  description,
+  imageUrl,
+  demoUrl,
   githubUrl,
   technologies,
-  index 
 }: ProjectCardProps) {
-  const [isHovered, setIsHovered] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const showImage = imageUrl && !imageError;
 
   return (
-    <div
-      className="relative group rounded-2xl overflow-hidden border-2 border-graydeep/30 bg-gradient-to-br from-graydeep/20 to-transparent hover:border-violet/50 transition-all duration-500"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        animationDelay: `${index * 100}ms`,
-      }}
-    >
-      <div className="relative h-48 bg-graydeep/30 overflow-hidden">
-        {!imageError ? (
+    <article className="glass group flex flex-col overflow-hidden rounded-[22px] transition-all duration-300 hover:-translate-y-1 hover:border-violet hover:shadow-[8px_8px_0_rgba(177,143,207,0.22)]">
+      <div className="pixel-grid flex h-52 items-center justify-center overflow-hidden">
+        {showImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={imageUrl}
             alt={title}
-            className={`w-full  object-contain transition-transform duration-700 ${
-              isHovered ? 'scale-105' : 'scale-100'
-            }`}
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             onError={() => setImageError(true)}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <span className="text-rose font-pixelify">Image not found</span>
-          </div>
+          <span className="font-pixelify text-base text-mist">
+            [PROJECT IMAGE]
+          </span>
         )}
-        
-        <div className={`absolute inset-0 bg-gradient-to-t from-blackdeep/60 to-transparent transition-opacity duration-300 ${
-          isHovered ? 'opacity-100' : 'opacity-50'
-        }`}></div>
-        
-        <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-          {technologies.map((tech, techIndex) => (
+      </div>
+
+      <div className="flex flex-1 flex-col gap-3 p-6">
+        <div className="flex flex-wrap gap-2">
+          {technologies.map((tech) => (
             <span
               key={tech}
-              className="px-2 py-1 bg-violet/80 text-blackdeep text-xs font-pixelify rounded-lg backdrop-blur-sm"
-              style={{ animationDelay: `${techIndex * 50}ms` }}
+              className="rounded-lg bg-violet/15 px-2.5 py-1 text-xs text-violet"
             >
               {tech}
             </span>
           ))}
         </div>
-      </div>
 
-      <div className="p-6">
-        <h3 className="text-2xl font-bold text-lavender font-pixelify mb-3">
+        <h3 className="m-0 font-pixelify text-[26px] font-bold leading-tight">
           {title}
         </h3>
-        
-        <p className="text-rose text-sm leading-relaxed mb-4">
+
+        <p className="m-0 flex-1 text-sm leading-relaxed text-mist">
           {description}
         </p>
 
-        <div className="flex gap-3">
-          <a
-            href={demoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet to-violet/80 hover:from-violet/80 hover:to-violet text-blackdeep font-bold rounded-lg transition-all duration-300 transform hover:scale-105 font-pixelify text-sm flex-1 justify-center"
-          >
-            <EyeOutlined />
-            Visit Demo
-          </a>
-          
-          {githubUrl && (
-            <a
-              href={githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-rose hover:bg-rose/80 text-blackdeep font-bold rounded-lg transition-all duration-300 transform hover:scale-105 font-pixelify text-sm justify-center"
-            >
-              <GithubOutlined />
-              Code
-            </a>
-          )}
-        </div>
+        {(demoUrl || githubUrl) && (
+          <div className="mt-2 flex gap-3">
+            {demoUrl && (
+              <a
+                href={demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-violet px-4 font-pixelify text-sm font-bold text-blackdeep transition-all duration-300 hover:bg-violet/80"
+              >
+                <EyeOutlined />
+                Visit Demo
+              </a>
+            )}
+            {githubUrl && (
+              <a
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-lavender/25 px-4 font-pixelify text-sm font-bold text-lavender transition-all duration-300 hover:border-violet hover:text-violet"
+              >
+                <GithubOutlined />
+                Code
+              </a>
+            )}
+          </div>
+        )}
       </div>
-
-      {isHovered && (
-        <div className="absolute inset-0 border-2 border-violet/30 rounded-2xl pointer-events-none"></div>
-      )}
-    </div>
+    </article>
   );
 }
