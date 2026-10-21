@@ -55,10 +55,19 @@ export default function ProjectsSection() {
     {
       id: 6,
       category: "uiux",
-      title: "Project Title 6",
-      description: "One line: the problem, and your role.",
-      imageUrl: "",
-      demoUrl: "https://www.behance.net/your-username",
+      title: "Tatman",
+      description: "food allergy awareness app that helps individuals and caregivers identify allergens, make safer food choices, and manage food-related risks through a simple, user-friendly experience.",
+      imageUrl: "/image/tatmen.png",
+      demoUrl: "https://www.behance.net/gallery/257309973/Tatman-%28%29-Allergy-Safety-App-UXUI-Case-Study",
+      technologies: ["Figma", "UI/UX"],
+    },
+     {
+      id: 7,
+      category: "uiux",
+      title: "Luqya",
+      description: "Luqya lets users explore Expo 2030 through 3D-scanned spaces, an AI guide, and personalized memory films narrated in their own voice.",
+      imageUrl: "/image/Luqya.png",
+      demoUrl: "https://www.behance.net/gallery/257319317/-Luqya-Virtual-Expo-App-UXUI-Case",
       technologies: ["Figma", "UI/UX"],
     },
   ];

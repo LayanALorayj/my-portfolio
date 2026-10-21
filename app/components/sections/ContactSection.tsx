@@ -34,7 +34,7 @@ export default function ContactSection() {
                   Get In Touch
                 </h2>
                 <p className="text-lg text-rose font-pixelify text-center lg:text-center">
-                  Ready to start your next project? Let's talk!
+                  Ready to start your next project? Let&apos;s talk!
                 </p>
               </div>
               <ContactForm />
